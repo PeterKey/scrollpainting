@@ -1,0 +1,14 @@
+.container {
+  height: 100%;
+  display: flex;
+  overflow-y: hidden;
+  overflow-x: scroll;
+}
+
+.imageContainer {
+  height: 100%;
+}
+
+.image {
+  height: 100%;
+}
