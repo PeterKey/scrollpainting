@@ -69,8 +69,7 @@ export default function Painting({
         width={dimensions.height * painting.image.aspect}
         height={dimensions.height}
         className={css.image}
-        src={imageURL}
-        // src={loadImage ? imageURL : ''}
+        src={loadImage ? imageURL : ''}
         alt="" // Setting a fixed alt will mess up the observer and load all images at once
       />
     </div>
