@@ -35,8 +35,8 @@ export default function Painting({
     setImageURL(
       urlFor(painting.image)
         .height(imageHeight)
-        .format('webp')
-        .quality(80)
+        .format('jpg')
+        .quality(70)
         .url(),
     )
 
@@ -69,7 +69,8 @@ export default function Painting({
         width={dimensions.height * painting.image.aspect}
         height={dimensions.height}
         className={css.image}
-        src={loadImage ? imageURL : ''}
+        src={imageURL}
+        // src={loadImage ? imageURL : ''}
         alt="" // Setting a fixed alt will mess up the observer and load all images at once
       />
     </div>
