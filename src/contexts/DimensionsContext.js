@@ -2,23 +2,25 @@ import React, { useEffect, useRef, useState } from 'react'
 
 const DimensionsContext = React.createContext()
 
-export function DimensionsProvider(props) {
-  const [dimensionsState, setDimensions] = useState({
+function getDimensions() {
+  return {
     width: window.innerWidth,
     height: window.innerHeight,
-  })
+    largestDimension:
+      window.innerWidth > window.innerHeight
+        ? window.innerWidth
+        : window.innerHeight,
+  }
+}
 
-  const dimensionsRef = useRef({
-    width: window.innerWidth,
-    height: window.innerHeight,
-  })
+export function DimensionsProvider(props) {
+  const [dimensionsState, setDimensions] = useState(getDimensions())
+
+  const dimensionsRef = useRef(getDimensions())
 
   useEffect(() => {
     window.addEventListener('resize', () => {
-      const newWindowSize = {
-        width: window.innerWidth,
-        height: window.innerHeight,
-      }
+      const newWindowSize = getDimensions()
       dimensionsRef.current = newWindowSize
       setDimensions(newWindowSize)
     })

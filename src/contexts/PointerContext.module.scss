@@ -1,0 +1,43 @@
+.pointer {
+  pointer-events: none;
+  position: absolute;
+  transform-origin: 0 0;
+  will-change: transform;
+  z-index: 999;
+}
+
+.scale {
+  transform: scale(1);
+  transition: transform 200ms 150ms ease-out;
+  transform-origin: 50% 50%;
+  will-change: transform;
+}
+
+.hover {
+  transform: scale(0.00001) !important;
+  transition: transform 100ms ease-in;
+}
+
+.svg {
+  filter: drop-shadow(0px 0px 7px rgb(255 255 255));
+  margin: -5px -10px;
+}
+
+.close {
+  position: absolute;
+  opacity: 0;
+  transform: translate(-50%, -50%);
+}
+
+.closeReveal {
+  opacity: 1;
+  transition: opacity 300ms 800ms ease-out;
+}
+
+.tutorialText {
+  font-size: 0.8em;
+  font-weight: bold;
+  color: white;
+  text-align: center;
+  transform: translate(-50%, 100%);
+}

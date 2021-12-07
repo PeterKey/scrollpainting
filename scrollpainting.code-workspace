@@ -1,0 +1,13 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "../scrollpainting-sanity"
+		}
+	],
+	"settings": {
+		"prettier.tabWidth": 4
+	}
+}

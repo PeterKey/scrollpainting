@@ -3,12 +3,47 @@
   display: flex;
   overflow-y: hidden;
   overflow-x: scroll;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  user-select: none;
+}
+
+.container::-webkit-scrollbar {
+  display: none;
 }
 
 .imageContainer {
   height: 100%;
+  user-select: none;
 }
 
 .image {
   height: 100%;
+  pointer-events: none;
+}
+
+.scrollIndicator {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: white;
+  transform: scaleX(0);
+  transform-origin: 0 0;
+  pointer-events: none;
+}
+
+.borderLeft {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 3px;
+  background: white;
+  pointer-events: none;
+}
+
+.borderRight {
+  width: 3px;
+  flex-shrink: 0;
 }

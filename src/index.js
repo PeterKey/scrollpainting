@@ -4,11 +4,14 @@ import './index.css'
 import App from './App'
 
 import { DimensionsProvider } from './contexts/DimensionsContext'
+import { PointerProvider } from './contexts/PointerContext'
 
 ReactDOM.render(
   <React.StrictMode>
     <DimensionsProvider>
-      <App />
+      <PointerProvider>
+        <App />
+      </PointerProvider>
     </DimensionsProvider>
   </React.StrictMode>,
   document.getElementById('root'),
