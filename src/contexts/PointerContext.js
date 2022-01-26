@@ -195,7 +195,8 @@ export function PointerProvider(props) {
         ref={translateDiv}
         className={css.pointer}
         style={{
-          opacity: suspectTouch ? 0 : mode === POINTER_MODE.SCROLL ? 0 : 1,
+          // opacity: suspectTouch ? 0 : mode === POINTER_MODE.SCROLL ? 0 : 1,
+          opacity: 0,
         }}
       >
         <div
