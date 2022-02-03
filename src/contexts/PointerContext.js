@@ -171,6 +171,7 @@ export function PointerProvider(props) {
   }
 
   useEffect(() => {
+    console.log(suspectTouch)
     document.addEventListener('mousemove', handleMouseMove)
     document.addEventListener('touchstart', handleTouchInput)
     window.requestAnimationFrame(render)
