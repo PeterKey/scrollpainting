@@ -108,15 +108,25 @@ export default function PaintingScroller() {
         // Maybe a hacky way to get image dimensions?
         const response = await client.fetch(query)
         let totalAspectRatio = 0
-        response.forEach(({ image }) => {
-          const imageDimensions = image.asset._ref.split('-')[2].split('x')
-          image.width = parseInt(imageDimensions[0])
-          image.height = parseInt(imageDimensions[1])
-          image.aspect = image.width / image.height
-          totalAspectRatio += image.aspect
+        const images = []
+        response.forEach((painting) => {
+          if (painting.image.asset) {
+            const imageDimensions = painting.image.asset._ref
+              ?.split('-')[2]
+              .split('x')
+            painting.image.width = parseInt(imageDimensions[0])
+            painting.image.height = parseInt(imageDimensions[1])
+            painting.image.aspect = painting.image.width / painting.image.height
+            totalAspectRatio += painting.image.aspect
+            images.push(painting)
+          }
+          // image.width = parseInt(imageDimensions[0])
+          // image.height = parseInt(imageDimensions[1])
+          // image.aspect = image.width / image.height
+          // totalAspectRatio += image.aspect
         })
         totalAspect.current = totalAspectRatio
-        setPaintings(response)
+        setPaintings(images)
         // requestAnimationFrame(updateScrollIndicator)
       } catch (e) {
         console.error(e)
