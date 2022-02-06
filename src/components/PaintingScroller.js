@@ -2,14 +2,7 @@ import { useContext, useEffect, useRef, useState } from 'react'
 import IntersectionObserverAdmin from 'intersection-observer-admin'
 
 import { client } from '../sanity'
-import {
-  MAX_SCROLL_SPEED,
-  SCROLL_EASE_OUT_DURATION,
-  easeTime,
-  SCROLL_EASE_IN_DURATION,
-  easeInQuad,
-  easeOutQuad,
-} from '../definitions'
+import { MAX_SCROLL_SPEED, SCROLL_SMOOTHING } from '../definitions'
 
 import DimensionsContext from '../contexts/DimensionsContext'
 import PointerContext, { POINTER_MODE } from '../contexts/PointerContext'
@@ -29,6 +22,7 @@ export default function PaintingScroller() {
   const [shouldScroll, setShouldScroll] = useState(false)
   const isScrolling = useRef(false)
   const scrollSpeed = useRef(0)
+  const lastIteration = useRef(0)
   const easeOutScrollStart = useRef(false)
   const easeInScrollStart = useRef(false)
 
@@ -52,47 +46,30 @@ export default function PaintingScroller() {
   //   requestAnimationFrame(updateScrollIndicator)
   // }
 
-  function autoScroll() {
-    if (isScrolling.current) {
-      let easeAmount = 1.0
-      if (easeInScrollStart.current) {
-        easeAmount = easeTime(
-          easeInScrollStart.current,
-          SCROLL_EASE_IN_DURATION,
-          Date.now(),
-          easeInQuad,
-        )
-        if (!easeAmount) {
-          easeInScrollStart.current = false
-          easeAmount = 1.0
-        }
-      }
-      let scrollAmount =
-        (pointer.pos.current.x / dimensions.dimensionsRef.current.width - 0.5) *
+  function autoScroll(timestamp) {
+    const elapsed = lastIteration.current
+      ? timestamp - lastIteration.current
+      : 16
+    lastIteration.current = timestamp
+    const smoothingFraction = SCROLL_SMOOTHING * elapsed * 0.01
+
+    const scrollAmountTarget = isScrolling.current
+      ? (pointer.pos.current.x / dimensions.dimensionsRef.current.width - 0.5) *
         2
+      : 0
 
-      scrollSpeed.current = scrollAmount * MAX_SCROLL_SPEED * easeAmount
-      const newScrollPosition =
-        scrollContainer.current.scrollLeft + scrollSpeed.current
-      scrollContainer.current.scrollTo(newScrollPosition, 0)
+    scrollSpeed.current +=
+      (scrollAmountTarget - scrollSpeed.current) * smoothingFraction
+    const newScrollPosition =
+      scrollContainer.current.scrollLeft +
+      scrollSpeed.current * MAX_SCROLL_SPEED
+    scrollContainer.current.scrollTo(newScrollPosition, 0)
 
+    if (isScrolling.current || Math.abs(scrollSpeed.current) > 0.008) {
       requestAnimationFrame(autoScroll)
-    } else if (easeOutScrollStart.current) {
-      const easeAmount = easeTime(
-        easeOutScrollStart.current,
-        SCROLL_EASE_OUT_DURATION,
-        Date.now(),
-        easeOutQuad,
-      )
-      if (easeAmount) {
-        const newScrollPosition =
-          scrollContainer.current.scrollLeft +
-          (1 - easeAmount) * scrollSpeed.current
-        scrollContainer.current.scrollTo(newScrollPosition, 0)
-        requestAnimationFrame(autoScroll)
-      } else {
-        easeOutScrollStart.current = false
-      }
+    } else {
+      scrollSpeed.current = 0
+      lastIteration.current = 0
     }
   }
 
@@ -120,10 +97,6 @@ export default function PaintingScroller() {
             totalAspectRatio += painting.image.aspect
             images.push(painting)
           }
-          // image.width = parseInt(imageDimensions[0])
-          // image.height = parseInt(imageDimensions[1])
-          // image.aspect = image.width / image.height
-          // totalAspectRatio += image.aspect
         })
         totalAspect.current = totalAspectRatio
         setPaintings(images)

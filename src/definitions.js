@@ -1,6 +1,7 @@
 export const SCROLL_EASE_OUT_DURATION = 600
 export const SCROLL_EASE_IN_DURATION = 300
 export const MAX_SCROLL_SPEED = 150
+export const SCROLL_SMOOTHING = 1 / 5
 
 export const DEAD_AREA_CENTER = 100
 
